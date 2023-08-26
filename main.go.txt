@@ -1,0 +1,101 @@
+package main
+
+import (
+	"errors"
+	"log"
+
+	logdestinations "github.com/mert019/go-log/log_destinations"
+	"github.com/mert019/go-log/logger"
+)
+
+func main() {
+
+	rabbitMqLogger, err := logdestinations.NewRabbitMqLogger(
+		logdestinations.RabbitMqLoggerConfiguration{
+			Url:       "amqp://RabbitMQUser:Rabbit123456@localhost:5672/",
+			QueueName: "GoLogQueue",
+		},
+	)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	loggerConfiguration := logger.LoggerConfiguration{
+		LogDestinationConfigurations: []logger.LogDestinationConfiguration{
+			{
+				Name:            "Rabbitmq",
+				MinimumLogLevel: logger.Warning,
+				Destination:     rabbitMqLogger,
+			},
+		},
+	}
+
+	err = logger.InitializeLogger(loggerConfiguration)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	loga, err := logger.GetLogger()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	sendCount := 20000
+
+	for i := 0; i < sendCount; i++ {
+		loga.Log(logger.LogModel{
+			Message:     "Critic",
+			LogType:     logger.Critical,
+			Error:       errors.New("Oops"),
+			RequestBody: "RequestBody",
+		})
+	}
+
+	log.Println("Cool2")
+}
+
+func LogToMongoDb() {
+	mongoLogger, err := logdestinations.NewMongoDbLogger(
+		logdestinations.MongoDbLoggerConfiguration{
+			DbUri:      "mongodb://root:example@localhost:27017/",
+			Database:   "GoLog",
+			Collection: "Logs",
+		})
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	loggerConfiguration := logger.LoggerConfiguration{
+		LogDestinationConfigurations: []logger.LogDestinationConfiguration{
+			{
+				Name:            "MongoDb",
+				MinimumLogLevel: logger.Warning,
+				Destination:     mongoLogger,
+			},
+		},
+	}
+
+	err = logger.InitializeLogger(loggerConfiguration)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	loga, err := logger.GetLogger()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for i := 0; i < 2; i++ {
+
+		loga.Log(logger.LogModel{
+			Message:     "Critic",
+			LogType:     logger.Critical,
+			Error:       errors.New("Oops"),
+			RequestBody: "RequestBody",
+		})
+	}
+
+	log.Println("Cool")
+}

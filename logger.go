@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/mert019/go-log/core"
+	"github.com/mert019/go-log/gologcore"
 )
 
-var loggerInstance core.ILogger
+var loggerInstance gologcore.ILogger
 
 type Logger struct {
-	logDestinations []core.LogDestinationConfiguration
+	logDestinations []gologcore.LogDestinationConfiguration
 }
 
-func InitializeLogger(configuration core.LoggerConfiguration) error {
+func InitializeLogger(configuration gologcore.LoggerConfiguration) error {
 
 	newLogger, err := NewLogger(configuration)
 	if err != nil {
@@ -24,14 +24,14 @@ func InitializeLogger(configuration core.LoggerConfiguration) error {
 	return nil
 }
 
-func GetLogger() (core.ILogger, error) {
+func GetLogger() (gologcore.ILogger, error) {
 	if loggerInstance == nil {
-		return nil, &core.LoggerIsNotInitializedError{}
+		return nil, &gologcore.LoggerIsNotInitializedError{}
 	}
 	return loggerInstance, nil
 }
 
-func NewLogger(configuration core.LoggerConfiguration) (core.ILogger, error) {
+func NewLogger(configuration gologcore.LoggerConfiguration) (gologcore.ILogger, error) {
 
 	err := configuration.Validate()
 	if err != nil {
@@ -45,7 +45,7 @@ func NewLogger(configuration core.LoggerConfiguration) (core.ILogger, error) {
 	return loggerInstance, nil
 }
 
-func (l *Logger) Log(logModel *core.LogModel) {
+func (l *Logger) Log(logModel *gologcore.LogModel) {
 
 	var wg sync.WaitGroup
 
@@ -61,7 +61,7 @@ func (l *Logger) Log(logModel *core.LogModel) {
 
 		log := logModel.MapToLog()
 
-		go func(d core.LogDestinationConfiguration) {
+		go func(d gologcore.LogDestinationConfiguration) {
 			defer wg.Done()
 
 			err := d.Destination.Log(log)

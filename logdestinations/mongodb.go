@@ -3,7 +3,7 @@ package logdestinations
 import (
 	"context"
 
-	"github.com/mert019/go-log/core"
+	"github.com/mert019/go-log/gologcore"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -14,11 +14,11 @@ type MongoDBLoggerConfiguration struct {
 	Collection string
 }
 
-func NewMongoDBLogger(configuration MongoDBLoggerConfiguration) (core.ILogDestination, error) {
+func NewMongoDBLogger(configuration MongoDBLoggerConfiguration) (gologcore.ILogDestination, error) {
 
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(configuration.DbUri))
 	if err != nil {
-		return nil, &core.LogDestinationConnectionError{
+		return nil, &gologcore.LogDestinationConnectionError{
 			Destination:     "MongoDB",
 			ConnectionError: err,
 		}
@@ -38,7 +38,7 @@ type MongoDBLogger struct {
 	collection    *mongo.Collection
 }
 
-func (mongoDBLogger *MongoDBLogger) Log(log core.Log) error {
+func (mongoDBLogger *MongoDBLogger) Log(log gologcore.Log) error {
 	_, err := mongoDBLogger.collection.InsertOne(context.TODO(), log)
 	return err
 }

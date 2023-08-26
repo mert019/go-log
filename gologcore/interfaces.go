@@ -1,4 +1,4 @@
-package core
+package gologcore
 
 type ILogger interface {
 	Log(*LogModel)

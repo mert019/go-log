@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/mert019/go-log/core"
+	"github.com/mert019/go-log/gologcore"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -14,11 +14,11 @@ type RabbitMQLoggerConfiguration struct {
 	QueueName string
 }
 
-func NewRabbitMqLogger(configuration RabbitMQLoggerConfiguration) (core.ILogDestination, error) {
+func NewRabbitMqLogger(configuration RabbitMQLoggerConfiguration) (gologcore.ILogDestination, error) {
 
 	connection, err := amqp.Dial(configuration.Url)
 	if err != nil {
-		return nil, &core.LogDestinationConnectionError{
+		return nil, &gologcore.LogDestinationConnectionError{
 			Destination:     "RabbitMQ",
 			ConnectionError: err,
 		}
@@ -26,7 +26,7 @@ func NewRabbitMqLogger(configuration RabbitMQLoggerConfiguration) (core.ILogDest
 
 	ch, err := connection.Channel()
 	if err != nil {
-		return nil, &core.LogDestinationConnectionError{
+		return nil, &gologcore.LogDestinationConnectionError{
 			Destination:     "RabbitMQ",
 			ConnectionError: err,
 		}
@@ -59,7 +59,7 @@ type RabbitMQLogger struct {
 	queue         amqp.Queue
 }
 
-func (rabbitMQLogger *RabbitMQLogger) Log(log core.Log) error {
+func (rabbitMQLogger *RabbitMQLogger) Log(log gologcore.Log) error {
 
 	channel, err := rabbitMQLogger.connection.Channel()
 	if err != nil {

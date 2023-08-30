@@ -14,7 +14,7 @@ type RabbitMQLoggerConfiguration struct {
 	QueueName string
 }
 
-func NewRabbitMqLogger(configuration RabbitMQLoggerConfiguration) (gologcore.ILogDestination, error) {
+func NewRabbitMQLogger(configuration RabbitMQLoggerConfiguration) (gologcore.ILogDestination, error) {
 
 	connection, err := amqp.Dial(configuration.Url)
 	if err != nil {
@@ -59,7 +59,7 @@ type RabbitMQLogger struct {
 	queue         amqp.Queue
 }
 
-func (rabbitMQLogger *RabbitMQLogger) Log(log gologcore.Log) error {
+func (rabbitMQLogger *RabbitMQLogger) Log(logModel gologcore.Log) error {
 
 	channel, err := rabbitMQLogger.connection.Channel()
 	if err != nil {
@@ -67,7 +67,7 @@ func (rabbitMQLogger *RabbitMQLogger) Log(log gologcore.Log) error {
 	}
 	defer channel.Close()
 
-	body, err := json.Marshal(log)
+	body, err := json.Marshal(logModel)
 	if err != nil {
 		return err
 	}

@@ -22,7 +22,7 @@ func (lc *LoggerConfiguration) Validate() error {
 			return &GoLogValidationError{Message: "LogDestinationConfiguration cannot be empty"}
 		}
 
-		if strings.Trim(destinationConfiguration.Name, " ") == "" {
+		if len(strings.TrimSpace(destinationConfiguration.Name)) == 0 {
 			return &GoLogValidationError{Message: "LogDestinationConfiguration.Name cannot be empty"}
 		}
 

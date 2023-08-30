@@ -10,7 +10,7 @@ go get github.com/mert019/go-log
 Create a log destination instance that implements the `gologcore.ILogDestination`.
 You can use go-log's pre-implemented destionations, or you can implement your own log destination.
 ```go
-rabbitmqLogger, err = logdestinations.NewRabbitMqLogger(
+rabbitmqLogger, err = logdestinations.NewRabbitMQLogger(
 		logdestinations.RabbitMQLoggerConfiguration{
 			Url:       "amqp://RabbitMQUser:Rabbit123456@localhost:5672/",
 			QueueName: "logs",

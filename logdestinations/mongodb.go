@@ -38,8 +38,8 @@ type MongoDBLogger struct {
 	collection    *mongo.Collection
 }
 
-func (mongoDBLogger *MongoDBLogger) Log(log gologcore.Log) error {
-	_, err := mongoDBLogger.collection.InsertOne(context.TODO(), log)
+func (mongoDBLogger *MongoDBLogger) Log(logModel gologcore.Log) error {
+	_, err := mongoDBLogger.collection.InsertOne(context.TODO(), logModel)
 	return err
 }
 

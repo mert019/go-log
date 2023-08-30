@@ -4,6 +4,8 @@ import "strings"
 
 type LoggerConfiguration struct {
 	LogDestinationConfigurations []LogDestinationConfiguration
+
+	OnErrorWriteToConsole bool
 }
 
 type LogDestinationConfiguration struct {

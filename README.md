@@ -78,6 +78,15 @@ logger.Close()
 - Critical
 ```
 
+## Pre-Implemented Log Destinations
+As explained above, you can implement your own log destination by implementing the `gologcore.ILogDestination` interface. go-log offers pre-implemented log destinations to make it easier to use.
+```console
+- RabbitMQ
+- Console
+- File
+- MongoDB
+```
+
 ## Project Status
 This project is currently in development and may not be production-ready. Please use it with caution and feel free to contribute or report issues.
 
